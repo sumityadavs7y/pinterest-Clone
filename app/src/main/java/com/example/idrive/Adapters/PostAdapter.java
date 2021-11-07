@@ -16,13 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.idrive.ModelResponse.Category;
 import com.example.idrive.ModelResponse.PostModel;
 import com.example.idrive.R;
-import com.example.idrive.Util.ImageLoadTask;
 import com.example.idrive.Util.ImageUtil;
 import com.example.idrive.Util.InMemoryCache;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.viewHolder> {
 
@@ -49,8 +50,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.viewHolder> {
         ImageUtil.checkCacheOrLoad(imageBitMapCache,holder.postImageView,post.getUrls().getSmall());
         try{
             ImageUtil.checkCacheOrLoad(imageBitMapCache,holder.userImageView,post.getUser().getImageUrl().getSmall());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            String time=post.getCreated_at();
+            Date d = sdf.parse(time);
+            String formattedTime = output.format(d);
+            holder.createdAtTextView.setText(formattedTime);
         }catch (Exception e){
-//            e.printStackTrace();
+            e.printStackTrace();
         }
         holder.userNameTextView.setText(post.getUser().getName());
         holder.likeCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -80,6 +87,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.viewHolder> {
         holder.userImageView.setImageResource(android.R.color.transparent);
         holder.categoryChipGroup.removeAllViews();
         holder.likeCheckBox.setChecked(false);
+        holder.createdAtTextView.setText("");
     }
 
     @Override
@@ -93,6 +101,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.viewHolder> {
         ImageView userImageView;
         TextView userNameTextView;
         TextView likeCountTextView;
+        TextView createdAtTextView;
         CheckBox likeCheckBox;
         ChipGroup categoryChipGroup;
 
@@ -105,6 +114,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.viewHolder> {
             likeCheckBox = itemView.findViewById(R.id.like_botton);
             likeCountTextView = itemView.findViewById(R.id.like_count);
             categoryChipGroup = itemView.findViewById(R.id.chipGroup);
+            createdAtTextView = itemView.findViewById(R.id.created_at);
         }
     }
 

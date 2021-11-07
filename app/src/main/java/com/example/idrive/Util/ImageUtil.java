@@ -14,6 +14,5 @@ public class ImageUtil {
 //            Log.i("DEBUG", "cached for "+url);
             imageView.setImageBitmap(bitmap);
         }
-
     }
 }
